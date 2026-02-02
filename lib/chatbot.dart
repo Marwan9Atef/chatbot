@@ -1,4 +1,5 @@
 import 'package:chatbot/core/routes/app_router.dart';
+import 'package:chatbot/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class Chatbot extends StatelessWidget {
@@ -10,6 +11,8 @@ class Chatbot extends StatelessWidget {
       routerConfig: AppRouter.routes,
       debugShowCheckedModeBanner: false,
       title: 'Chatbot',
+      theme: AppTheme.lightTheme,
+      themeMode: ThemeMode.light,
 
 
       

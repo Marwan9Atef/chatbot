@@ -1,27 +1,30 @@
 import 'package:chatbot/core/theme/app_color.dart';
 import 'package:chatbot/core/theme/app_style.dart';
+import 'package:chatbot/feature/chat/data/models/chat_model.dart';
 import 'package:flutter/material.dart';
 
 class MessageItem extends StatelessWidget {
   const MessageItem({
     super.key,
-    required this.isCurrentUser,
-    required this.text,
+required this.message
   });
-  final String text;
-  final bool isCurrentUser;
+  final ChatModel message;
+
   @override
   Widget build(BuildContext context) {
+    final bool isCurrentUser=message.sender==Sender.user;
     return Padding(
-   padding: EdgeInsets.fromLTRB(
-      isCurrentUser ? 64.0 : 16.0,
-      4,
-      isCurrentUser ? 16.0 : 64.0,
-      4,
-    ),
+      padding: EdgeInsets.fromLTRB(
+        isCurrentUser ? 64.0 : 16.0,
+        4,
+        isCurrentUser ? 16.0 : 64.0,
+        4,
+      ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,  
-        mainAxisAlignment: isCurrentUser?MainAxisAlignment.end : MainAxisAlignment.start,      
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: isCurrentUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           !isCurrentUser
               ? DecoratedBox(
@@ -63,9 +66,12 @@ class MessageItem extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: borderDirection()),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 18,
+                ),
                 child: Text(
-                  text,
+                  message.message,
                   style: AppStyles.styleBold13().copyWith(
                     color: isCurrentUser ? AppColor.white : AppColor.grey,
                   ),
@@ -79,7 +85,7 @@ class MessageItem extends StatelessWidget {
   }
 
   BorderRadius borderDirection() {
-    return isCurrentUser
+    return message.sender==Sender.user
         ? BorderRadius.only(
             topLeft: Radius.circular(25),
             bottomLeft: Radius.circular(25),

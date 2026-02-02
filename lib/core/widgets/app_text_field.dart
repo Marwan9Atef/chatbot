@@ -3,8 +3,9 @@ import 'package:chatbot/core/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ChatTextField extends StatelessWidget {
-  const ChatTextField({
+class AppTextField extends StatelessWidget {
+  const
+  AppTextField({
     super.key,
     this.controller,
     this.onSend,
@@ -22,12 +23,11 @@ class ChatTextField extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          
           child: Container(
             padding: const EdgeInsets.only(right: 16),
 
             margin: const EdgeInsets.symmetric(horizontal: 24),
-           
+
             decoration: BoxDecoration(
               color: const Color(0xFFF5F5F5),
               borderRadius: BorderRadius.circular(25),
@@ -50,10 +50,9 @@ class ChatTextField extends StatelessWidget {
                       ),
                     ),
                     style: AppStyles.styleBold13().copyWith(
-                        color: AppColor.mostBlack
-                      ),
-                    textInputAction: TextInputAction.send,
-                    onSubmitted: (_) => onSend?.call(),
+                      color: AppColor.mostBlack,
+                    ),
+
                   ),
                 ),
                 // Microphone button
@@ -61,13 +60,13 @@ class ChatTextField extends StatelessWidget {
                   onTap: onMicrophoneTap,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child:SvgPicture.asset("assets/images/mice.svg")
+                    child: SvgPicture.asset("assets/images/mice.svg"),
                   ),
                 ),
                 // Send button
-                GestureDetector(
+                InkWell(
                   onTap: onSend,
-                  child:SvgPicture.asset("assets/images/send.svg")
+                  child: SvgPicture.asset("assets/images/send.svg"),
                 ),
               ],
             ),

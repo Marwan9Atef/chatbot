@@ -1,18 +1,24 @@
 import 'package:chatbot/core/theme/app_color.dart';
 import 'package:chatbot/core/theme/app_style.dart';
 import 'package:chatbot/feature/chat/data/models/chat_model.dart';
+import 'package:chatbot/feature/chat/presentation/widgets/loading_chat_indicator.dart';
 import 'package:flutter/material.dart';
 
 class MessageItem extends StatelessWidget {
   const MessageItem({
     super.key,
-required this.message
+    required this.message,
+    this.isLoading = false,
+    this.isfail = false,
   });
   final ChatModel message;
+  final bool isLoading;
+  final bool isfail;
 
   @override
   Widget build(BuildContext context) {
-    final bool isCurrentUser=message.sender==Sender.user;
+
+    final bool isCurrentUser = message.sender == Sender.user;
     return Padding(
       padding: EdgeInsets.fromLTRB(
         isCurrentUser ? 64.0 : 16.0,
@@ -58,26 +64,28 @@ required this.message
               : const SizedBox(),
           const SizedBox(width: 7),
           Flexible(
-            child: DecoratedBox(
-              decoration: ShapeDecoration(
-                color: isCurrentUser
-                    ? AppColor.primaryColor
-                    : const Color(0xffF4F4F4),
-                shape: RoundedRectangleBorder(borderRadius: borderDirection()),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 18,
-                ),
-                child: Text(
-                  message.message,
-                  style: AppStyles.styleBold13().copyWith(
-                    color: isCurrentUser ? AppColor.white : AppColor.grey,
+            child: isLoading
+                ? LoadingChatIndicator()
+                : DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: isCurrentUser
+                          ? AppColor.primaryColor
+                          : const Color(0xffF4F4F4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: borderDirection(),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 18,
+                      ),
+                      child: ChatText(
+                        message: message,
+                        isCurrentUser: isCurrentUser,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
           ),
         ],
       ),
@@ -85,7 +93,7 @@ required this.message
   }
 
   BorderRadius borderDirection() {
-    return message.sender==Sender.user
+    return message.sender == Sender.user
         ? BorderRadius.only(
             topLeft: Radius.circular(25),
             bottomLeft: Radius.circular(25),
@@ -96,5 +104,26 @@ required this.message
             topLeft: Radius.circular(25),
             bottomRight: Radius.circular(25),
           );
+  }
+}
+
+class ChatText extends StatelessWidget {
+  const ChatText({
+    super.key,
+    required this.message,
+    required this.isCurrentUser,
+  });
+
+  final ChatModel message;
+  final bool isCurrentUser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      message.message,
+      style: AppStyles.styleBold13().copyWith(
+        color: isCurrentUser ? AppColor.white : AppColor.grey,
+      ),
+    );
   }
 }

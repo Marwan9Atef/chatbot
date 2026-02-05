@@ -1,38 +1,54 @@
 import 'package:chatbot/feature/chat/data/models/chat_model.dart';
-import 'package:chatbot/feature/chat/presentation/cubit/chat_states.dart';
+import 'package:chatbot/feature/chat/domain/send_message_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:injectable/injectable.dart';
+import 'chat_states.dart';
+@injectable
 class ChatCubit extends Cubit<ChatState> {
-  ChatCubit() : super(ChatState(messages: []));
+  ChatCubit(this._useCase) : super(const ChatInitial(messages: []));
+  final SendMessageUseCase _useCase;
+
   void sendUserMessage(String text) {
     if (text.trim().isEmpty) return;
 
-    emit(
-      ChatState(
-        messages: [
-          ...state.messages,
-          ChatModel(message: text, sender: Sender.user),
-        ],
-      ),
-      
-    );
+    final updatedMessages = [
+      ...state.messages,
+      ChatModel(message: text, sender: Sender.user),
+    ];
 
-      _sendAiReply();
-  }
-    Future<void> _sendAiReply() async {
-    await Future.delayed(const Duration(seconds: 1));
+    emit(ChatInitial(messages: updatedMessages));
 
-    emit(
-      ChatState(
-        messages: [
-          ...state.messages,
-           ChatModel(
-            message: "Hello 👋 I'm your AI agent",
-            sender: Sender.ai,
-          ),
-        ],
-      ),
-    );
+    _sendAiReply(text);
   }
 
+  Future<void> _sendAiReply(String text) async {
+    emit(ChatLoading(messages: state.messages));
+    final result = await _useCase(text);
+    result.fold((error) {
+      emit(ChatFailure(messages: state.messages, error: error.message));
+    }, (response) {
+      emit(ChatSuccess(messages: [...state.messages, ChatModel(message: response, sender: Sender.ai)]));
+    });
+
+  
+  }
 }
+  // // 🔵 Loading
+    // 
+
+    // try {
+    //   await Future.delayed(const Duration(seconds: 1));
+
+    //   final aiReply = "Hello 👋 I'm your AI agent";
+
+    //   final updatedMessages = [
+    //     ...state.messages,
+    //     ChatModel(message: aiReply, sender: Sender.ai),
+    //   ];
+
+    //   // ✅ Success
+    //   emit(ChatSuccess(messages: updatedMessages));
+    // } catch (e) {
+    //   // 🔴 Failure
+    //   emit(ChatFailure(messages: state.messages, error: e.toString()));
+    // }

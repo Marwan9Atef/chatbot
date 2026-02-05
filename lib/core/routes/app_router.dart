@@ -1,3 +1,4 @@
+import 'package:chatbot/core/di/service_locator.dart';
 import 'package:chatbot/core/routes/route_center.dart';
 import 'package:chatbot/feature/chat/presentation/cubit/chat_cubit.dart';
 import 'package:chatbot/feature/chat/presentation/screens/chat_screen.dart';
@@ -13,7 +14,7 @@ class AppRouter {
           pageBuilder: (context, state) {
             return CustomTransitionPage(
               child: BlocProvider(
-                create: (context) => ChatCubit(),
+                create: (context) => serviceLocator.get<ChatCubit>(),
                 child: const ChatScreen()),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) =>

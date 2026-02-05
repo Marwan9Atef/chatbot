@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppTextField extends StatelessWidget {
-  const
-  AppTextField({
+  const AppTextField({
     super.key,
     this.controller,
     this.onSend,
@@ -52,7 +51,6 @@ class AppTextField extends StatelessWidget {
                     style: AppStyles.styleBold13().copyWith(
                       color: AppColor.mostBlack,
                     ),
-
                   ),
                 ),
                 // Microphone button

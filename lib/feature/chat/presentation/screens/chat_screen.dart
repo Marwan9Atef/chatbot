@@ -30,7 +30,12 @@ class ChatScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index < state.messages.length) {
                         final msg = state.messages[index];
-                        return MessageItem(message: msg, key: ValueKey(msg.id));
+                        return MessageItem(
+                          message: msg,
+                          key: ValueKey(msg.id),
+                          isfail: msg.hasFailed,
+                          failText: msg.errorMessage ?? "",
+                        );
                       } else {
                         return MessageItem(
                           isLoading: true,

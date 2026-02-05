@@ -1,8 +1,11 @@
 import 'package:chatbot/core/theme/app_color.dart';
 import 'package:chatbot/core/theme/app_style.dart';
 import 'package:chatbot/feature/chat/data/models/chat_model.dart';
+import 'package:chatbot/feature/chat/presentation/cubit/chat_cubit.dart';
+import 'package:chatbot/feature/chat/presentation/widgets/error_indicator.dart';
 import 'package:chatbot/feature/chat/presentation/widgets/loading_chat_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageItem extends StatelessWidget {
   const MessageItem({
@@ -10,10 +13,12 @@ class MessageItem extends StatelessWidget {
     required this.message,
     this.isLoading = false,
     this.isfail = false,
+    this.failText=""
   });
   final ChatModel message;
   final bool isLoading;
   final bool isfail;
+  final String failText;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +85,12 @@ class MessageItem extends StatelessWidget {
                         horizontal: 24,
                         vertical: 18,
                       ),
-                      child: ChatText(
+                      child:isfail ? ErrorIndicator(
+                        prefText: failText,
+                        onTap: () {
+                          context.read<ChatCubit>().sendUserMessage(message.message);
+                        },
+                      ) : ChatText(
                         message: message,
                         isCurrentUser: isCurrentUser,
                       ),

@@ -12,18 +12,17 @@ class MessageItem extends StatelessWidget {
     super.key,
     required this.message,
     this.isLoading = false,
-    this.isfail = false,
-    this.failText=""
+
   });
   final ChatModel message;
   final bool isLoading;
-  final bool isfail;
-  final String failText;
+
 
   @override
   Widget build(BuildContext context) {
 
     final bool isCurrentUser = message.sender == Sender.user;
+
     return Padding(
       padding: EdgeInsets.fromLTRB(
         isCurrentUser ? 64.0 : 16.0,
@@ -85,8 +84,8 @@ class MessageItem extends StatelessWidget {
                         horizontal: 24,
                         vertical: 18,
                       ),
-                      child:isfail ? ErrorIndicator(
-                        prefText: failText,
+                      child:message.hasFailed ? ErrorIndicator(
+                        prefText: message.errorMessage??"",
                         onTap: () {
                           context.read<ChatCubit>().sendUserMessage(message.message);
                         },

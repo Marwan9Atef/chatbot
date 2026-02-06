@@ -33,8 +33,7 @@ class ChatScreen extends StatelessWidget {
                         return MessageItem(
                           message: msg,
                           key: ValueKey(msg.id),
-                          isfail: msg.hasFailed,
-                          failText: msg.errorMessage ?? "",
+                  
                         );
                       } else {
                         return MessageItem(

@@ -6,7 +6,7 @@ class ApiClient {
 
   ApiClient() {
     _dio = Dio(_baseOptions);
-    _dio.interceptors.add(_logInterceptor);
+    // _dio.interceptors.add(_logInterceptor);
   }
 
   static BaseOptions get _baseOptions => BaseOptions(
@@ -30,10 +30,12 @@ class ApiClient {
   Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParameters,
+    Options? options,
     CancelToken? cancelToken,
   }) => _dio.get(
     path,
     queryParameters: queryParameters,
+    options: options,
     cancelToken: cancelToken,
   );
 
@@ -41,11 +43,13 @@ class ApiClient {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    Options? options,
     CancelToken? cancelToken,
   }) => _dio.post(
     path,
     data: data,
     queryParameters: queryParameters,
+    options: options,
     cancelToken: cancelToken,
   );
 
@@ -53,11 +57,13 @@ class ApiClient {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    Options? options,
     CancelToken? cancelToken,
   }) => _dio.put(
     path,
     data: data,
     queryParameters: queryParameters,
+    options: options,
     cancelToken: cancelToken,
   );
 
@@ -65,11 +71,13 @@ class ApiClient {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    Options? options,
     CancelToken? cancelToken,
   }) => _dio.delete(
     path,
     data: data,
     queryParameters: queryParameters,
+    options: options,
     cancelToken: cancelToken,
   );
 
@@ -77,11 +85,13 @@ class ApiClient {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    Options? options,
     CancelToken? cancelToken,
   }) => _dio.patch(
     path,
     data: data,
     queryParameters: queryParameters,
+    options: options,
     cancelToken: cancelToken,
   );
 }

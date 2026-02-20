@@ -3,6 +3,12 @@ class ChatMessageModel {
       this.parts, 
       this.role,});
 
+  factory ChatMessageModel.fromUser(String text, {String role = 'user'}) =>
+      ChatMessageModel(
+        parts: [Parts(text: text)],
+        role: role,
+      );
+
   ChatMessageModel.fromJson(dynamic json) {
     if (json['parts'] != null) {
       parts = [];

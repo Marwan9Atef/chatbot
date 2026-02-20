@@ -13,7 +13,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
     emit(SendMessageLoading());
     try {
       final chat = await chatRepo.senChatMessages(messages: messages);
-      emit(SendMessageSuccess(chat: chat));
+      emit(SendMessageSuccess(messages: chat));
     } catch (e) {
       emit(SendMessageError(error: e.toString()));
     }

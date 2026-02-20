@@ -1,14 +1,17 @@
 import 'package:chatbot/core/widgets/app_text_field.dart';
+import 'package:chatbot/feature/chat/data/models/chat_message_model.dart';
+import 'package:chatbot/feature/chat/presentation/cubit/send_message_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatTextField extends StatefulWidget {
   const ChatTextField({
     super.key,
-    required this.onSendMessage,
+    required this.messages,
     this.onMicrophoneTap,
   });
 
-  final ValueChanged<String> onSendMessage;
+final List<ChatMessageModel> messages;
   final VoidCallback? onMicrophoneTap;
 
   @override
@@ -25,7 +28,10 @@ class _ChatTextFieldState extends State<ChatTextField> {
       onSend: () {
         final text = _chatController.text.trim();
         if (text.isEmpty) return;
-        widget.onSendMessage(text);
+        final message = ChatMessageModel.fromUser(text);
+        widget.messages.add(message);
+        context.read<SendMessageCubit>().sendChatMessages(widget.messages);
+ 
         _chatController.clear();
       },
       onMicrophoneTap: widget.onMicrophoneTap ?? () {},

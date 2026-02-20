@@ -1,23 +1,21 @@
-
 import 'package:chatbot/feature/chat/data/models/chat_message_model.dart';
 import 'package:chatbot/feature/chat/domain/repo/chat_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+part 'send_message_state.dart';
 
-part 'chat_state.dart';
-
-class ChatCubit extends Cubit<ChatState> {
-  ChatCubit({required this.chatRepo}) : super(ChatInitial());
+class SendMessageCubit extends Cubit<SendMessageState> {
+  SendMessageCubit({required this.chatRepo}) : super(SendMessageInitial());
   final ChatRepo chatRepo;
 
   Future<void> sendChatMessages(List<ChatMessageModel> messages) async {
-    emit(ChatLoading());
+    emit(SendMessageLoading());
     try {
       final chat = await chatRepo.senChatMessages(messages: messages);
-      emit(ChatSuccess(chat: chat));
+      emit(SendMessageSuccess(chat: chat));
     } catch (e) {
-      emit(ChatError(error: e.toString()));
+      emit(SendMessageError(error: e.toString()));
     }
   }
 }

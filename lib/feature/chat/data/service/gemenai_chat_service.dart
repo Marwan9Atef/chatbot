@@ -9,7 +9,7 @@ class GemenaiChatService {
     List<ChatMessageModel> messages,
   ) async {
     final response = await _apiClient.post(
-      ApiConstant.chatEndpoint,
+      APIConstant.chatEndpoint,
       data: {"contents": messages.map((message) => message.toJson()).toList()},
     );
     return ChatMessageModel.fromJson(response.data);

@@ -1,97 +1,118 @@
 import 'package:dio/dio.dart';
-import 'package:chatbot/core/constant/api_constant.dart';
 
-class ApiClient {
-  late final Dio _dio;
+class DioApiClient {
+  static const String _defaultBaseUrl =
+      'https://generativelanguage.googleapis.com/v1beta/models';
 
-  ApiClient() {
-    _dio = Dio(_baseOptions);
-    // _dio.interceptors.add(_logInterceptor);
+  DioApiClient({
+    String baseUrl = _defaultBaseUrl,
+    Duration? connectTimeout,
+    Duration? receiveTimeout,
+    Duration? sendTimeout,
+    Map<String, dynamic>? headers,
+    List<Interceptor>? interceptors,
+  }) : _dio = Dio(
+          BaseOptions(
+            baseUrl: baseUrl,
+            connectTimeout: connectTimeout ?? const Duration(seconds: 30),
+            receiveTimeout: receiveTimeout ?? const Duration(seconds: 30),
+            sendTimeout: sendTimeout ?? const Duration(seconds: 30),
+            headers: headers ?? _defaultHeaders,
+          ),
+        ) {
+    _dio.interceptors.addAll([
+      LogInterceptor(requestBody: true, responseBody: true, error: true),
+      ...?interceptors,
+    ]);
   }
 
-  static BaseOptions get _baseOptions => BaseOptions(
-    baseUrl: APIConstant.baseUrl,
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    sendTimeout: const Duration(seconds: 30),
-    queryParameters: {'key': APIConstant.apiKey},
-    headers: {'Content-Type': 'application/json'},
-  );
+  static const Map<String, dynamic> _defaultHeaders = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  };
 
-  static LogInterceptor get _logInterceptor => LogInterceptor(
-    request: true,
-    requestHeader: true,
-    requestBody: true,
-    responseHeader: false,
-    responseBody: true,
-    error: true,
-  );
+  final Dio _dio;
 
-  Future<Response> get(
+  Future<T> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-  }) => _dio.get(
-    path,
-    queryParameters: queryParameters,
-    options: options,
-    cancelToken: cancelToken,
-  );
+  }) async {
+    final response = await _dio.get<T>(
+      path,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+    return response.data as T;
+  }
 
-  Future<Response> post(
+  Future<T> post<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-  }) => _dio.post(
-    path,
-    data: data,
-    queryParameters: queryParameters,
-    options: options,
-    cancelToken: cancelToken,
-  );
+  }) async {
+    final response = await _dio.post<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+    return response.data as T;
+  }
 
-  Future<Response> put(
+  Future<T> put<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-  }) => _dio.put(
-    path,
-    data: data,
-    queryParameters: queryParameters,
-    options: options,
-    cancelToken: cancelToken,
-  );
+  }) async {
+    final response = await _dio.put<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+    return response.data as T;
+  }
 
-  Future<Response> delete(
+  Future<T> delete<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-  }) => _dio.delete(
-    path,
-    data: data,
-    queryParameters: queryParameters,
-    options: options,
-    cancelToken: cancelToken,
-  );
+  }) async {
+    final response = await _dio.delete<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+    return response.data as T;
+  }
 
-  Future<Response> patch(
+  Future<T> patch<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-  }) => _dio.patch(
-    path,
-    data: data,
-    queryParameters: queryParameters,
-    options: options,
-    cancelToken: cancelToken,
-  );
+  }) async {
+    final response = await _dio.patch<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+    return response.data as T;
+  }
 }

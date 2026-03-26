@@ -1,62 +1,37 @@
+import 'package:chatbot/feature/chat/data/models/chat_message_part_model.dart';
+
 class ChatMessageModel {
-  ChatMessageModel({
-      this.parts, 
-      this.role,});
+  const ChatMessageModel({required this.parts, required this.role});
 
-  factory ChatMessageModel.fromUser(String text, {String role = 'user'}) =>
-      ChatMessageModel(
-        parts: [Parts(text: text)],
-        role: role,
-      );
+  final List<ChatMessagePartModel> parts;
+  final String role;
 
-  ChatMessageModel.fromJson(dynamic json) {
-    if (json['parts'] != null) {
-      parts = [];
-      json['parts'].forEach((v) {
-        parts?.add(Parts.fromJson(v));
-      });
-    }
-    role = json['role'];
-  }
-  List<Parts>? parts;
-  String? role;
-ChatMessageModel copyWith({  List<Parts>? parts,
-  String? role,
-}) => ChatMessageModel(  parts: parts ?? this.parts,
-  role: role ?? this.role,
-);
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    if (parts != null) {
-      map['parts'] = parts?.map((v) => v.toJson()).toList();
-    }
-    map['role'] = role;
-    return map;
+  factory ChatMessageModel.fromUserMessage(String content) {
+    return ChatMessageModel(
+      parts: [ChatMessagePartModel(text: content)],
+      role: 'user',
+    );
   }
 
-}
-
-class Parts {
-  Parts({
-      this.text, 
-      this.thoughtSignature,});
-
-  Parts.fromJson(dynamic json) {
-    text = json['text'];
-    thoughtSignature = json['thoughtSignature'];
-  }
-  String? text;
-  String? thoughtSignature;
-Parts copyWith({  String? text,
-  String? thoughtSignature,
-}) => Parts(  text: text ?? this.text,
-  thoughtSignature: thoughtSignature ?? this.thoughtSignature,
-);
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['text'] = text;
-    map['thoughtSignature'] = thoughtSignature;
-    return map;
+  factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
+    final partsList = json['parts'] as List?;
+    return ChatMessageModel(
+      parts: partsList
+              ?.map(
+                (e) => ChatMessagePartModel.fromJson(e as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
+      role: json['role'] as String? ?? '',
+    );
   }
 
+  Map<String, dynamic> toJson() => {
+        'parts': parts.map((e) => e.toJson()).toList(),
+        'role': role,
+      };
+
+  String get displayText => parts.isNotEmpty ? parts.first.text : '';
+
+  bool get isUser => role == 'user';
 }

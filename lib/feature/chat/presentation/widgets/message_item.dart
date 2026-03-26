@@ -3,16 +3,16 @@ import 'package:chatbot/core/theme/app_style.dart';
 import 'package:chatbot/feature/chat/data/models/chat_message_model.dart';
 import 'package:flutter/material.dart';
 
-class MessageItem extends StatelessWidget {
-  const MessageItem({
+class ChatMessageBubbleWidget extends StatelessWidget {
+  const ChatMessageBubbleWidget({
     super.key,
     required this.chatMessage,
   });
 
   final ChatMessageModel chatMessage;
 
-  bool get isCurrentUser => chatMessage.role == 'user';
-  String get message => chatMessage.parts?.first.text ?? '';
+  bool get isCurrentUser => chatMessage.isUser;
+  String get message => chatMessage.displayText;
 
   @override
   Widget build(BuildContext context) {

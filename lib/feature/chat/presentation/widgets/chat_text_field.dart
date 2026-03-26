@@ -11,7 +11,7 @@ class ChatTextField extends StatefulWidget {
     this.onMicrophoneTap,
   });
 
-final List<ChatMessageModel> messages;
+  final List<ChatMessageModel> messages;
   final VoidCallback? onMicrophoneTap;
 
   @override
@@ -28,10 +28,17 @@ class _ChatTextFieldState extends State<ChatTextField> {
       onSend: () {
         final text = _chatController.text.trim();
         if (text.isEmpty) return;
-        final message = ChatMessageModel.fromUser(text);
+
+        var sendMessageCubit = context.read<SendMessageCubit>();
+        var message = ChatMessageModel.fromUserMessage(text);
+
+        if (sendMessageCubit.state is SendMessageFailure) {
+          widget.messages.removeLast();
+        }
+
         widget.messages.add(message);
-        context.read<SendMessageCubit>().sendChatMessages(widget.messages);
- 
+        sendMessageCubit.sendMessage(messages: widget.messages);
+
         _chatController.clear();
       },
       onMicrophoneTap: widget.onMicrophoneTap ?? () {},

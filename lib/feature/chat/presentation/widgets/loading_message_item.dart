@@ -2,8 +2,8 @@ import 'package:chatbot/core/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typing_indicator/flutter_typing_indicator.dart';
 
-class LoadingMessageItem extends StatelessWidget {
-  const LoadingMessageItem({super.key});
+class LoadingChatMessageBubbleWidget extends StatelessWidget {
+  const LoadingChatMessageBubbleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

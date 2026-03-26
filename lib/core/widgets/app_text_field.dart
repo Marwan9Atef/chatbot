@@ -61,8 +61,8 @@ class AppTextField extends StatelessWidget {
                     child: SvgPicture.asset("assets/images/mice.svg"),
                   ),
                 ),
-                // Send button
                 InkWell(
+                  key: const Key('send_button'),
                   onTap: onSend,
                   child: SvgPicture.asset("assets/images/send.svg"),
                 ),
